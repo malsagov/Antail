@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { useLocation} from 'react-router-dom'
+import Routes from './routes';
+import {ApolloClient, ApolloProvider, InMemoryCache, gql} from '@apollo/client'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {parse} from 'query-string'
+
+import Header from './components/header/Header';
+import { useDispatch } from 'react-redux';
+import {getCurrentUser} from './redux/currentUserReduser'
+
+const App = () => {
+    const client = new ApolloClient({
+        uri: 'https://graphql.anilist.co',
+        cache: new InMemoryCache()
+    })
+
+    const location = useLocation()
+    const dispatch = useDispatch()
+    const accessToken = parse(location.hash)
+    if (accessToken.access_token) {
+      localStorage.setItem('access_token', accessToken.access_token)
+      window.location.hash = ''
+    }
+    
+    React.useEffect(() => {
+        if(!localStorage.getItem('access_token')) {
+          return
+        }
+        dispatch(getCurrentUser())
+    }, [])
+
+    return (
+        <ApolloProvider client={client}>
+            <Header />
+            <Routes />
+        </ApolloProvider>
+    );
 }
 
-export default App;
+export default App

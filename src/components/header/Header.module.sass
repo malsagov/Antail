@@ -1,0 +1,229 @@
+.header
+    backdrop-filter: blur(4px)
+    background: rgba(0,0,20,.7)
+    position: absolute
+    left: 0
+    top: 0px
+    width: 100%
+    z-index: 10
+
+.headerBlock
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+.logo
+    font-size: 24px
+    text-transform: uppercase 
+    font-weight: 700
+    color: white
+    text-decoration: none
+    position: relative
+    &::after
+        content: ''
+        position: absolute
+        left: 50%
+        bottom: -18px
+        transform: translateX(-50%)
+        width: 400px 
+        height: 1.5px 
+        background: linear-gradient(90deg, rgba(0,0,20,.01) 0%, rgba(255,255,255,5) 30%, rgba(255,255,255,5) 60%, rgba(0,0,20,.01) 100%)
+
+.logoAddition
+    color: #f14444
+
+.nav
+    padding-top: 23px 
+    padding-bottom: 23px
+    position: relative
+    &::after
+        content: ''
+        position: absolute
+        left: 50%
+        bottom: 0
+        transform: translateX(-50%)
+        width: 1000px 
+        height: 1px 
+        background: linear-gradient(90deg, rgba(0,0,20,.01) 0%, rgba(255,255,255,5) 30%, rgba(255,255,255,5) 60%, rgba(0,0,20,.01) 100%)
+
+.navList
+    display: flex
+    align-items: center
+
+.navItem:not(:last-child)
+    margin-right: 50px 
+
+.navLink
+    color: rgba(255,255,255,0.5)
+    text-decoration: none
+    transition: color 0.3s
+    position: relative
+    
+.navLink:hover 
+    color: rgba(255,255,255,1)
+
+.activeLink 
+    color: rgba(255,255,255,1)
+    &::after
+        content: ''
+        position: absolute
+        left: 50%
+        bottom: -26px
+        transform: translateX(-50%)
+        width: 180% 
+        height: 2px 
+        background: linear-gradient(90deg, rgba(0,0,20,.001) 0%, rgba(255,255,255,5) 40%, rgba(255,255,255,5) 60%, rgba(0,0,20,.001) 100%)
+        box-shadow: 0px 0px 9px 4px rgba(255,255,255,0.25)
+        z-index: 10
+        border-radius: 50%
+    &::before
+        content: ''
+        position: absolute
+        left: 50%
+        bottom: -26px
+        transform: translateX(-50%)
+        width: 120% 
+        height: 1px 
+        box-shadow: 0px 0px 20px 4px rgba(255,255,255,0.9), 0px 0px 5px 1px rgba(255,255,255,0.5)
+        z-index: 10
+        border-radius: 50%
+
+.authBlock
+    display: flex
+    align-items: center
+    position: relative
+    min-height: 52px
+    &::after
+        content: ''
+        position: absolute
+        left: 50%
+        bottom: -8px
+        transform: translateX(-50%)
+        width: 700px 
+        height: 1.5px
+        background: linear-gradient(90deg, rgba(0,0,20,.01) 0%, rgba(255,255,255,5) 30%, rgba(255,255,255,5) 60%, rgba(0,0,20,.01) 100%)
+
+.search
+    width: 20px
+    height: 20px
+    cursor: pointer
+    margin-right: 20px
+
+.search path 
+    opacity:  0.5 
+    transition: opacity  0.3s
+
+.search:hover path 
+    opacity: 1
+
+.login
+    color: #fff 
+    opacity: 0.5 
+    text-decoration: none
+    transition: opacity  0.3s
+
+.login:hover
+    opacity: 1
+
+.user
+    display: flex
+    align-items: center
+    cursor: pointer
+    position: relative
+
+.avatar
+    min-width: 40px
+    min-height: 40px 
+    border-radius: 50%
+    border: 2px solid rgba(255,255,255,0.5)
+    transition: border 0.3s
+    margin-right: 5px
+
+.name
+    color: rgba(255,255,255,0.5)
+    transition: color 0.3s
+    margin-right: 5px
+
+.arrow
+    width: 13px 
+    height: 13px
+
+.arrow path
+    width: 13px 
+    height: 13px
+    fill: rgba(255,255,255,0.5)
+    transition: fill 0.3s
+
+.user:hover .avatar
+    border: 2px solid rgba(255,255,255,1)
+    
+.user:hover .name
+    color: rgba(255,255,255,1)
+
+.user:hover .arrow path
+    fill: rgba(255,255,255,1)
+
+.userPopup
+    position: absolute
+    left: -53px
+    bottom: -123px
+    width: 150px
+    opacity: 0
+    pointer-events: none 
+    user-select: none 
+    transition: opacity 0.3s
+    cursor: auto
+    &:after
+        content: ''
+        position: absolute
+        left: 50%
+        top: -9px
+        transform: translateX(-50%)
+        background-color: transparent
+        border-bottom: .6rem solid #fff
+        border-left: .4rem solid transparent
+        border-right: .4rem solid transparent
+
+.userPopup_top
+    display: flex
+    flex-direction: column
+    background-color: #fff
+    padding: 15px 15px 10px 15px
+    z-index: 10
+    border-top-right-radius: 6px
+    border-top-left-radius: 6px
+
+.userPopup_link
+    text-decoration: none
+    color: black
+
+.userPopup_link:not(:last-child)
+    margin-bottom: 10px
+
+.userPopup_bot
+    padding: 10px 15px 10px 15px
+    background-color: black
+    border-bottom-right-radius: 6px
+    border-bottom-left-radius: 6px
+
+.logout
+    background-color: transparent
+    border: none 
+    font-family: inherit 
+    color: white 
+    cursor: pointer
+    padding: 0
+    margin: 0
+    font-size: 12px
+
+.authBlock:hover .userPopup
+    opacity: 1
+    pointer-events: auto
+    user-select: auto
+
+    
+    
+
+
+
+
