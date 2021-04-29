@@ -1,3 +1,4 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -8,11 +9,30 @@ import './index.sass'
 import store from './redux/srote'
 //rafce
 
+const client = new ApolloClient({
+  uri: 'https://graphql.anilist.co',
+  cache: new InMemoryCache({
+    typePolicies: {
+      Page: {
+        fields: {
+          media: {
+            merge(existiong = [], incoming){
+              return incoming
+            } 
+          }
+        }
+      }
+    }
+  })
+})
+
 ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
-  </Provider>,
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
+  </ApolloProvider>,
   document.getElementById('root')
 );

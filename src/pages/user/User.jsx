@@ -1,40 +1,29 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import s from './User.module.sass'
-
-import { getUser } from '../../redux/userReducer'
 import { NavLink } from 'react-router-dom'
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
+
+import { GET_USER } from '../../graphql/queries/getUser'
+import Overview from './overview/Overview'
 
 const User = ({match, location}) => {
-    const {user, isLoading} = useSelector(state => ({
-        user: state.user.user,
-        isLoading: state.user.isLoading
-    }))
-    const dispatch = useDispatch()
-    
     const userName = match.params.slug
-
-    const EXCHANGE_RATES = gql`
-    query($name: String){
-      User(name: $name) {
-        id
-        name
-        bannerImage
-      }
-    }
-    `
-    const {loading, error, data} = useQuery(EXCHANGE_RATES, {
-        variables: {
+    const { loading: userLoading, error: userError, data: {User: user = {}} = {}} = useQuery( GET_USER, {
+        variables: { 
             name: userName
         }
     })
-    console.log(data)
+
     
     React.useEffect(() => {
-        dispatch(getUser(userName))
+        // dispatch(getUser(userName))
     }, [userName])
-
+        
+        
+        if (userLoading) return <div>Loading111...</div>
+        if (userError) return <div>Some error happend...</div>
+        
+        console.log(user)
     const isPath = (path) => {
         if (location.pathname.includes(path)) {
             return true
@@ -42,12 +31,9 @@ const User = ({match, location}) => {
         return false
     }
 
-    if(isLoading){
-        return <div>Loading...</div>
-    }
-
     return (
         <div className={s.User}>
+            
             <div className={s.banner} style={{backgroundImage: user.bannerImage ? `url(${user.bannerImage})` : null}}>
                 <div className={s.shadow}></div>
                 <div className={`container ${s.userContainer}`}>
@@ -84,7 +70,7 @@ const User = ({match, location}) => {
             {
                location.pathname === `/user/${userName}` && (
                 <div>
-                    1
+                    <Overview about={user.about}/>
                 </div>
                )
             }

@@ -1,0 +1,90 @@
+.filters
+    padding-top: 50px
+
+.searchWrap
+    display: flex
+    align-items: center
+    position: relative
+
+.name
+    color: rgb(81,97,112)
+    padding: 10px 0
+    font-size: 16px
+
+.icon
+    position: absolute
+    width: 15px
+    height: 15px 
+    left: 10px
+
+.icon path 
+    fill: rgb(201,215,227)
+
+.search
+    border: none
+    border-radius: 6px 
+    box-shadow: 0 14px 30px rgba(103,132,187,.1), 0 4px 4px rgba(103,132,187,.04)
+    padding: 11px 20px
+    padding-left: 35px
+    font-family: inherit
+    color: rgb(116,136,153)
+    
+.search:focus
+    outline: 0
+
+.search::-webkit-search-cancel-button
+    -webkit-appearance: none
+
+.secondaryFiltersFalse
+    // margin-top: 30px 
+    // visibility: hidden
+    // width: 100%
+
+.secondaryFilters
+    margin-top: 30px
+
+.secondaryFiltersIcon
+    width: 20px
+    margin-right: 15px
+    path
+     fill: rgb(173,192,210)
+
+.activeFilters
+    display: flex
+    align-items: center
+
+.secondFilter
+    display: flex
+    align-items: flex-start
+    background-color: rgb(61,180,242)
+    border-radius: 6px
+    color: #fff
+    cursor: pointer
+    font-size: 12px
+    line-height: 12px
+    padding: 6px 8px
+    text-transform: capitalize
+    animation: fade .2s ease-in-out
+
+.closeIcon
+    margin-left: 9px 
+    width: 7.5px
+    display: none
+    path
+        fill: rgb(201,232,255)
+
+.secondFilter:hover .closeIcon
+    display: block
+
+@keyframes fade
+    0%
+        opacity: 0
+        transform: scale(.91)
+    60%
+        opacity: 1
+    100%
+        transform: none
+        
+
+
+
