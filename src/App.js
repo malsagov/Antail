@@ -1,20 +1,16 @@
 import React from 'react'
 import { useLocation} from 'react-router-dom'
 import Routes from './routes';
-import {ApolloClient, ApolloProvider, InMemoryCache, gql} from '@apollo/client'
 
 import {parse} from 'query-string'
 
 import Header from './components/header/Header';
 import { useDispatch } from 'react-redux';
 import {getCurrentUser} from './redux/currentUserReduser'
+import Footer from './components/footer/Footer';
 
 const App = () => {
-    const client = new ApolloClient({
-        uri: 'https://graphql.anilist.co',
-        cache: new InMemoryCache()
-    })
-
+    
     const location = useLocation()
     const dispatch = useDispatch()
     const accessToken = parse(location.hash)
@@ -31,10 +27,11 @@ const App = () => {
     }, [])
 
     return (
-        <ApolloProvider client={client}>
+        <div>
             <Header />
             <Routes />
-        </ApolloProvider>
+            {/* <Footer/> */}
+        </div>
     );
 }
 
