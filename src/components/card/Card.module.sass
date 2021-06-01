@@ -1,6 +1,9 @@
 .card
     width: 185px 
     animation: fade .2s ease-in-out
+    position: relative
+    &:hover .details 
+        display: block
 
 .imageLink
     text-decoration: none
@@ -33,6 +36,103 @@
     text-decoration: none
     &:hover 
         color: rgb(61,180,242)
+
+.details
+    position: absolute
+    top: 5px
+    z-index: 10
+    background-color: #fff
+    border-radius: 6px
+    padding: 24px 
+    box-shadow: 0 14px 30px rgba(103,132,187,.15),0 4px 4px rgba(103,132,187,.05)
+    min-width: 250px 
+    pointer-events: none 
+    user-select: none
+    display: none
+    &:before 
+        width: 0
+        height: 0
+        content: ""
+        z-index: 2
+        transform: scale(1.01)
+        box-shadow: 0 14px 30px rgba(103,132,187,.1),0 4px 4px rgba(103,132,187,.02)
+        color: rgb(251,251,251)
+        position: absolute
+        top: 15%
+
+.left
+    left: 100%
+    margin-left: 16px
+    &:before
+        border-right: .6rem solid currentColor
+        border-bottom: .4rem solid transparent
+        border-top: .4rem solid transparent
+        right: 100%
+
+.right
+    right: 100%
+    margin-right: 16px
+    &:before
+        border-left: .6rem solid currentColor
+        border-bottom: .4rem solid transparent
+        border-top: .4rem solid transparent
+        left: 100%
+
+.header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    color: rgb(100,115,128)
+    font-weight: 600 
+    font-size: 16px
+
+.rate
+    display: flex
+    align-items: flex-start
+
+.date
+    text-transform: capitalize 
+
+.studios
+    margin-top: 10px
+    font-size: 13px 
+    font-weight: 700
+    text-transform: capitalize 
+    color: rgb(52,128,234)
+
+.info
+    margin-top: 6px 
+    color: rgb(116,136,153)
+    font-size: 13px 
+    font-weight: 600 
+    display: flex
+    align-items: center
+
+.separator 
+    padding: 0 4px
+
+.genre
+    margin-top: 22px
+    text-decoration: none
+    border-radius: 8px 
+    background-color: #3480ea
+    color: #f2f9fD
+    font-size: 11px 
+    font-weight: 700
+    padding: 0px 10px
+    text-transform: lowercase
+    height: 18px
+    display: inline-block
+    line-height: 19px
+
+.genre:not(:last-child)
+    margin-right: 8px
+
+.smile
+    width: 17px
+    height: 17px
+    margin-right: 5px
+    margin-top: -1px
 
 @keyframes fade
     0%

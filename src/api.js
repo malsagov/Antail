@@ -1,4 +1,3 @@
-import { getByTestId } from "@testing-library/dom";
 import axios from "axios";
 
 export const userAPI = {

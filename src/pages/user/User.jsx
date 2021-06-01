@@ -20,7 +20,7 @@ const User = ({match, location}) => {
     }, [userName])
         
         
-        if (userLoading) return <div>Loading111...</div>
+        if (userLoading) return null
         if (userError) return <div>Some error happend...</div>
         
         console.log(user)
@@ -70,7 +70,8 @@ const User = ({match, location}) => {
             {
                location.pathname === `/user/${userName}` && (
                 <div>
-                    <Overview about={user.about}/>
+                    1
+                    {/* <Overview about={user.about}/> */}
                 </div>
                )
             }
