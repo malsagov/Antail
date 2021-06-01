@@ -24,9 +24,9 @@ const Header = () => {
       console.log(currentUser, isAuthorized)
     }
 
-    if(isLoading){
-      return <div>Loading...</div>
-    }
+    // if(isLoading){
+    //   return <div>Loading...</div>
+    // }
 
     return (
       
@@ -56,19 +56,10 @@ const Header = () => {
                     Profile
                   </NavLink>
                 </li>
-                <li className={s.navItem}>
-                  <NavLink
-                    className={s.navLink}
-                    to="/forum"
-                    activeClassName={s.activeLink}
-                  >
-                    Forum
-                  </NavLink>
-                </li>
               </ul>
             </nav>
             <div className={s.authBlock}>
-                <svg
+                {/* <svg
                   className={s.search}
                   width="20"
                   height="20"
@@ -100,8 +91,9 @@ const Header = () => {
                     <g xmlns="http://www.w3.org/2000/svg"></g>
                     <g xmlns="http://www.w3.org/2000/svg"></g>
                   </g>
-                </svg>
+                </svg> */}
               {isAuthorized ? (
+                isLoading || 
                 <div className={s.user}>
                   <div className={s.avatar} style={{background: `url(${currentUser.avatar.medium}) center no-repeat`, backgroundSize: 'cover', backgroundClip: 'padding-box'}}></div>
                   <p className={s.name}>{currentUser.name}</p>

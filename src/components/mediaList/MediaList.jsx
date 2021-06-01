@@ -3,36 +3,42 @@ import { NavLink } from 'react-router-dom'
 
 import s from './MediaList.module.sass'
 import { listLinks, listTitles } from './utils'
+import { installRareIcon } from '../../utils/utils'
 
 import Card from '../../components/card/Card'
+import CardSkeleton from '../skeleton/card/CardSkeleton'
+import CardTableSkeleton from '../skeleton/cardTable/CardTableSkeleton'
 
-const MediaList = ({animeTrends}) => {
-    // console.log(Object.entries(animeTrends))
+const MediaList = ({animeTrends, loading}) => {
+    const titles = ['trending', 'season', 'nextSeason', 'popular', 'top']
+
     return (
         <>
             {
-                Object.entries(animeTrends).map((trend, i) => {
-                    return(
-                        <div key={trend[0]} className={`${s.landingSection}`}>
-                            <NavLink to={`/anime/${listLinks(trend[0])}`} className={s.titleWrap}>
-                                <h2 className={s.title}>{listTitles(trend[0])}</h2>
+                titles.map((title, i) => {
+                    return (
+                        <div key={title} className={`${s.landingSection}`}>
+                            <NavLink to={`/search/anime/${listLinks(title)}`} className={s.titleWrap}>
+                                <h2 className={s.title}>{listTitles(title)}</h2>
                                 <div className={s.expand}>View All</div>
                             </NavLink>
                             <div>
                                 {
-                                    trend[0] !== 'top'
-                                    ? (
+                                    title !== 'top'
+                                    ? ( 
                                         <div className={s.results}>
-                                        { trend[1].media.map(({id, coverImage, title}) => {
-                                            return (
-                                                <Card key={id} url='/anime/' id={id} coverImage={coverImage} title={title}/>
-                                            )
-                                        })}
-                                    </div>
+                                            {animeTrends && Object.values(animeTrends)[i].media.map(elem => {
+                                            })}
+                                            {(loading && <CardSkeleton />) || Object.values(animeTrends)[i].media.map(({id, coverImage, title, averageScore, episodes, genres, season, startDate, studios, format}, i) => {
+                                                return (
+                                                    <Card key={id} url='/anime/' id={id} coverImage={coverImage} title={title} averageScore={averageScore} episodes={episodes} genres={genres} season={season} date={startDate.year} studios={studios.edges[0].node.name ? studios.edges[0].node.name : ''} format={format} index={i}/>   
+                                                )
+                                            })}  
+                                        </div>
                                     ) 
                                     : (
-                                        <div className={s.resultsTable}>
-                                            { trend[1].media.map(({id, coverImage, title, genres, averageScore, popularity, format, episodes, startDate, status}, i) => {
+                                        <div className={s.resultTable}>
+                                            {(loading && <CardTableSkeleton />) || Object.values(animeTrends)[i].media.map(({id, coverImage, title, genres, averageScore, popularity, format, episodes, startDate, status}, i) => {
                                                 return (
                                                     <div key={id} className={s.topCardWrap}>
                                                         <div className={s.topCard}>
@@ -55,7 +61,9 @@ const MediaList = ({animeTrends}) => {
                                                             <div className={s.rightTopCard}>
                                                                 <div className={s.score}>
                                                                     <div className={s.percentWrap}>
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" className={s.scoreSmile}><path fill="currentColor" d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-110.3 0-200-89.7-200-200S137.7 56 248 56s200 89.7 200 200-89.7 200-200 200zm-80-216c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm4 72.6c-20.8 25-51.5 39.4-84 39.4s-63.2-14.3-84-39.4c-8.5-10.2-23.7-11.5-33.8-3.1-10.2 8.5-11.5 23.6-3.1 33.8 30 36 74.1 56.6 120.9 56.6s90.9-20.6 120.9-56.6c8.5-10.2 7.1-25.3-3.1-33.8-10.1-8.4-25.3-7.1-33.8 3.1z"></path></svg>
+                                                                        {   
+                                                                            installRareIcon(averageScore, s.scoreSmile)
+                                                                        }
                                                                         <div className={s.percent}>{averageScore}%</div>
                                                                     </div>
                                                                     <div className={s.popularity}>{popularity} users</div>
@@ -72,13 +80,12 @@ const MediaList = ({animeTrends}) => {
                                                         </div>
                                                     </div>
                                                 )
-                                            })}
+                                            })}  
                                         </div>
                                     )
-
                                 }
+                                
                             </div>
-                           
                         </div>
                     )
                 })

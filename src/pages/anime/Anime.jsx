@@ -1,106 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { useQuery, useLazyQuery } from '@apollo/client'
-import { useLocation } from 'react-router-dom'
-import { parse } from 'query-string'
-
-import { GET_CURRENT_ANIME_TRENDS } from '../../graphql/queries/getCurrentAnimeTrends'
-import { FILTER_ANIME } from '../../graphql/queries/filterAnime'
+import React from 'react'
 
 import s from './Anime.module.sass'
 
 import MediaList from '../../components/mediaList/MediaList'
 import Filters from '../../components/filters/Filters'
 import Card from '../../components/card/Card'
+import { useAnimeTrends } from '../../hooks/useAnimeTrends'
+import { useFilter } from '../../hooks/useFilter'
+import { usePagination } from '../../hooks/usePagination'
+import CardSkeleton from '../../components/skeleton/card/CardSkeleton'
 
 const Anime = () => {
-    const location = useLocation()
-    //фильтры из query запроса поисковой строки
-    const searchUrlQuery = parse(location.search)
-
-    //переключатель для получения новой порции данных
-    const [fetching, setFetching] = useState(false)
-    //текущая страница
-    const [currentPage, setCurrentPage] = useState(1)
-    //переключатель для блока с трендами и фильтрованными данными
-    const [isFilter, setIsFilter] = useState(false)
-
-    const {loading: animeLoading, error: animeError, data: animeTrends} = useQuery(GET_CURRENT_ANIME_TRENDS, {
-        variables: {
-            "type": "ANIME",
-            "season": "SPRING",
-            "seasonYear": 2021,
-            "nextSeason": "SUMMER",
-            "nextYear": 2021
-        }
-    })
-
-    const [getSearchingAnime, {fetchMore, loading: filterAnimeLoading, data: filterAnimeData }] = useLazyQuery(FILTER_ANIME, {
-      skip: !!searchUrlQuery.search
-    })
     
-    //получение данных с сервера и включение|выключение блока с полученными данными
-    useEffect(() => {
-      setIsFilter(false) 
-      if(searchUrlQuery.search) {
-        getSearchingAnime({
-          variables: {
-            page: 1,
-            type: "ANIME",
-            search: searchUrlQuery.search,
-            sort: "SEARCH_MATCH"
-          }
-        })
-        setIsFilter(true)
-      }
-    }, [searchUrlQuery.search])
+    //получение текущих аниме трендов
+    const { animeLoading, animeError, animeTrends } = useAnimeTrends()
 
-
-    //слушатель на скролл(для пагинации)
-    useEffect(() => {
-      document.addEventListener('scroll', scrollHandler)
-      return () => {
-        document.removeEventListener('scroll', scrollHandler)
-      }
-    }, [])
-
-    //пагинация
-    useEffect(() => {
-      if (fetching) {
-        if (filterAnimeData && filterAnimeData.Page.pageInfo.hasNextPage){
-          fetchMore({
-            variables: {
-              page: currentPage + 1,
-              type: "ANIME",
-              search: searchUrlQuery.search,
-              sort: "SEARCH_MATCH"
-            },
-            updateQuery: (prev, {fetchMoreResult}) => {
-              fetchMoreResult.Page.media = [
-                ...prev.Page.media,
-                ...fetchMoreResult.Page.media
-              ]
-              console.log(fetchMoreResult)
-              return fetchMoreResult
-            }
-          })
-          setCurrentPage(prev => prev + 1)
-        } else {
-          setCurrentPage(1)
-        }
-        setFetching(false)
-      }
-    }, [fetching])
-
-    //отслеживание скрола и переключатель пагенации
-    const scrollHandler = (e) => {
-      if(e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
-        setFetching(true)
-      }
-    }
-    
-    if(animeLoading) return <div>Loading...</div>
-    if(animeError) return <div>Some error happend...</div>
+    //получение методов для фильтрации и фильрованных данных
+    const [ fetchMore, filterAnimeLoading, filterAnimeData, isFilter ] = useFilter()
   
+    //пагинация
+    usePagination(filterAnimeData, isFilter, fetchMore)
+    
+    if(animeError) return <div>Some error happend...</div>
+    
     return (
       <div className={s.anime}>
         <div className="container">
@@ -109,20 +31,20 @@ const Anime = () => {
               {
                 isFilter 
                 ? (
+                    <>
                     <div className={s.results}>
-                      {filterAnimeLoading && <div>Loading...</div>}
-
-                      {filterAnimeData && filterAnimeData.Page.media.map(({id, coverImage, title}) => {
+                      {filterAnimeLoading && <CardSkeleton /> || filterAnimeData && filterAnimeData.Page.media.map(({id, coverImage, title, averageScore, episodes, genres, season, startDate, studios, format}, i) => {
                           return (
-                            <Card key={id} url='/anime/' coverImage={coverImage} title={title} />
+                            <Card key={id} url='/anime/' coverImage={coverImage} title={title} averageScore={averageScore} episodes={episodes} genres={genres} season={season} date={startDate.year} studios={studios.edges[0] ? studios.edges[0].node.name : ''} format={format} index={i}/>
                           )
                         })
                       }
-                      {filterAnimeData && (!filterAnimeData.Page.pageInfo.total && <div>No results</div>)}
                     </div>
+                    {filterAnimeData && (!filterAnimeData.Page.pageInfo.total && <div className={s.noResult}>No Results</div>)}
+                    </>
                 ) 
                 : (
-                  <MediaList animeTrends={animeTrends}/>
+                  <MediaList animeTrends={animeTrends} loading={animeLoading}/>
                 )
               }
           </div>

@@ -7,7 +7,6 @@ import {parse} from 'query-string'
 import Header from './components/header/Header';
 import { useDispatch } from 'react-redux';
 import {getCurrentUser} from './redux/currentUserReduser'
-import Footer from './components/footer/Footer';
 
 const App = () => {
     
@@ -24,13 +23,12 @@ const App = () => {
           return
         }
         dispatch(getCurrentUser())
-    }, [])
+    }, [dispatch])
 
     return (
         <div>
             <Header />
             <Routes />
-            {/* <Footer/> */}
         </div>
     );
 }
